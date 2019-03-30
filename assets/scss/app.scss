@@ -1,0 +1,15 @@
+@import "~bootstrap/scss/bootstrap";
+
+.homepage-banner
+{
+  position: relative;
+  background: #001f60;
+  .banner
+  {
+    background-image: url("/assets/img/homepage.jpg");
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
