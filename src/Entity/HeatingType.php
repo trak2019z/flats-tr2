@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +23,16 @@ class HeatingType
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Flat", mappedBy="heatingType")
+     */
+    private $flats;
+
+    public function __construct()
+    {
+        $this->flats = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,5 +48,44 @@ class HeatingType
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Flat[]
+     */
+    public function getFlats(): Collection
+    {
+        return $this->flats;
+    }
+
+    public function addFlat(Flat $flat): self
+    {
+        if (!$this->flats->contains($flat)) {
+            $this->flats[] = $flat;
+            $flat->setHeatingType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFlat(Flat $flat): self
+    {
+        if ($this->flats->contains($flat)) {
+            $this->flats->removeElement($flat);
+            // set the owning side to null (unless already changed)
+            if ($flat->getHeatingType() === $this) {
+                $flat->setHeatingType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

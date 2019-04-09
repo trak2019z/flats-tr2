@@ -1,0 +1,127 @@
+<div class="container" id="FLAT-FORM">
+    {{ form_start(form) }}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Informacje podstawowe
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-8">{{ form_row(form.title) }}</div>
+                <div class="col-sm-4">{{ form_row(form.flatType) }}</div>
+            </div>
+            <hr>
+            <h5 class="card-title">Lokalizacja</h5>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.city) }}
+                    {{ form_row(form.latitude) }}
+                    {{ form_row(form.longitude) }}
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Stancja</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    {{ form_row(form.constructionYear) }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form_row(form.area) }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form_row(form.floor) }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form_row(form.floors) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.buildingType) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.furnishings) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.heatingType) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.kitchenType) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.bathroomType) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.windowsType) }}
+                </div>
+                <div class="col-sm-2 d-flex align-items-center">
+                    {{ form_row(form.internet) }}
+                </div>
+                <div class="col-sm-4">
+                    {{ form_row(form.internetBandwidth) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.preferences) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Wposażenie</div>
+        <div class="card-body">
+            {{ form_errors(form.equipment) }}
+            {{ form_widget(form.equipment) }}
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Pokoje</div>
+        <div class="card-body">
+            <div id="room-list" data-counter="{{ form.rooms|length }}">
+                {% for room in form.rooms %}
+                    <div class="room">
+                        <span class="text-danger float-right delete-room"><i class="fa fa-times"></i> Usuń</span>
+                        {{ form_errors(room) }}
+                        {{ form_widget(room) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <template id="room-prototype">
+                <div class="room">
+                    <span class="text-danger float-right delete-room"><i class="fa fa-times"></i> Usuń</span>
+                    {{ form_widget(form.rooms.vars.prototype) }}
+                </div>
+            </template>
+            <div class="text-center">
+                <button type="button" class="btn btn-success add-another-room" data-room-list="#room-list" data-prototype="#room-prototype"><i class="fa fa-plus"></i> Dodaj pokój</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">Informacje końcowe</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.freeFrom) }}
+                </div>
+                <div class="col-sm-6">
+                    <h5 class="card-title">Dane kontaktowe</h5>
+                    <hr>
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.phone1) }}
+                    {{ form_row(form.phone2) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    {{ form_end(form) }}
+</div>

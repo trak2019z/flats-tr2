@@ -1,0 +1,5 @@
+tetranz_select2_entity:
+  minimum_input_length: 2
+  page_limit: 10
+  language: pl
+  allow_clear: true

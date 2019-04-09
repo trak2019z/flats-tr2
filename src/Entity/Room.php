@@ -31,6 +31,12 @@ class Room
      */
     private $freePlaces;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Flat", inversedBy="rooms")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $flat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class Room
     public function setFreePlaces(?int $freePlaces): self
     {
         $this->freePlaces = $freePlaces;
+
+        return $this;
+    }
+
+    public function getFlat(): ?Flat
+    {
+        return $this->flat;
+    }
+
+    public function setFlat(?Flat $flat): self
+    {
+        $this->flat = $flat;
 
         return $this;
     }

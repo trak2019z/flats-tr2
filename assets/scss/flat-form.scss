@@ -1,0 +1,26 @@
+#FLAT-FORM
+{
+  #flat_equipment,#flat_preferences
+  {
+    .form-check
+    {
+      display: inline-block;
+      margin: 0 1rem 1rem 0;
+    }
+  }
+
+  #room-list
+  {
+    .delete-room
+    {
+      cursor: pointer;
+    }
+
+    .room:not(:last-child)
+    {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #777;
+      margin-bottom: 10px;
+    }
+  }
+}

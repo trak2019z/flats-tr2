@@ -1,4 +1,7 @@
 {
+    "cocur/slugify": {
+        "version": "v3.2"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -508,6 +511,9 @@
     },
     "symfony/yaml": {
         "version": "v4.2.4"
+    },
+    "tetranz/select2entity-bundle": {
+        "version": "v2.9.5"
     },
     "twig/twig": {
         "version": "v2.7.2"
