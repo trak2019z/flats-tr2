@@ -15,10 +15,16 @@
             <div class="row">
                 <div class="col-sm-6">
                     {{ form_row(form.city) }}
+                    {{ form_row(form.address) }}
                     {{ form_row(form.latitude) }}
                     {{ form_row(form.longitude) }}
                 </div>
-                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <p><strong>Wskaż lokalizację budynku na mapie</strong></p>
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <div class="embed-responsive-item" id="flat_map" data-lat="{{ form.latitude.vars.value|replace({',':'.'})|e }}" data-lon="{{ form.longitude.vars.value|replace({',':'.'})|e }}"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

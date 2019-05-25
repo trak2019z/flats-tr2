@@ -26,7 +26,9 @@ class ApiController extends AbstractController
         return $this->json(array_map(function (City $city){
             return [
                 'id' => $city->getId(),
-                'text' => $city->getName().', '.$city->getDistrict()->getName().', '.$city->getRegion()->getName()
+                'text' => (string)$city,
+                'lat' => $city->getLat(),
+                'lon' => $city->getLon()
             ];
         },$cities));
     }

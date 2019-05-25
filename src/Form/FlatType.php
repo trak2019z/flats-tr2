@@ -142,6 +142,7 @@ class FlatType extends AbstractType
                 'class' => City::class,
                 'required' => true
             ])
+            ->add('address')
         ;
     }
 

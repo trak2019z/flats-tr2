@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +54,16 @@ class City
      * @ORM\JoinColumn(nullable=false)
      */
     private $district;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Flat", mappedBy="city")
+     */
+    private $flats;
+
+    public function __construct()
+    {
+        $this->flats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -140,5 +152,41 @@ class City
         $this->district = $district;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Flat[]
+     */
+    public function getFlats(): Collection
+    {
+        return $this->flats;
+    }
+
+    public function addFlat(Flat $flat): self
+    {
+        if (!$this->flats->contains($flat)) {
+            $this->flats[] = $flat;
+            $flat->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFlat(Flat $flat): self
+    {
+        if ($this->flats->contains($flat)) {
+            $this->flats->removeElement($flat);
+            // set the owning side to null (unless already changed)
+            if ($flat->getCity() === $this) {
+                $flat->setCity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName().', '.$this->getDistrict()->getName().', '.$this->getRegion()->getName();
     }
 }
