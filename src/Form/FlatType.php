@@ -86,7 +86,7 @@ class FlatType extends AbstractType
             ])
             ->add('flatType', EntityType::class, [
                 'class' => \App\Entity\FlatType::class,
-                'label' => 'Typ ogłoszenia'
+                'label' => 'Typ ogłoszenia',
             ])
             ->add('buildingType', EntityType::class, [
                 'class' => BuildingType::class,

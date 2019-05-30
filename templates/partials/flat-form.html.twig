@@ -16,8 +16,12 @@
                 <div class="col-sm-6">
                     {{ form_row(form.city) }}
                     {{ form_row(form.address) }}
-                    {{ form_row(form.latitude) }}
-                    {{ form_row(form.longitude) }}
+                    <div class="d-none">
+                        {{ form_widget(form.latitude) }}
+                        {{ form_widget(form.longitude) }}
+                    </div>
+                    {{ form_errors(form.latitude) }}
+                    {{ form_errors(form.longitude) }}
                 </div>
                 <div class="col-sm-6">
                     <p><strong>Wskaż lokalizację budynku na mapie</strong></p>

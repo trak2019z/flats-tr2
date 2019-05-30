@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Flat;
 use App\Form\FlatType;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,13 +14,19 @@ class Homepage extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function index(Request $request)
+    public function index(Request $request, ObjectManager $objectManager)
     {
-        $form = $this->createForm(FlatType::class);
+        $flat = new Flat();
+        $flat->setUser($this->getUser());
+        $form = $this->createForm(FlatType::class, $flat);
         $form->handleRequest($request);
         if($form->isSubmitted())
         {
-            dump($form->getData());
+            foreach ($flat->getRooms() as $room)
+                $room->setFlat($flat);
+
+            $objectManager->persist($flat);
+            $objectManager->flush();
         }
 
 

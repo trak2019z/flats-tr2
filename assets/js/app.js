@@ -43,7 +43,12 @@ if($('#flat_map').length)
     if($('#flat_city').length)
     {
         map.on('click',function (e) {
+            if(marker)
+                map.removeLayer(marker);
+
             marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+            $('#flat_latitude').val(e.latlng.lat);
+            $('#flat_longitude').val(e.latlng.lng);
         });
     }
 }

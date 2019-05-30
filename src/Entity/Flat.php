@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use App\Helpers\Helpers;
 use App\Helpers\Slugs;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FlatRepository")
@@ -134,17 +136,17 @@ class Flat
     private $windowsType;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Room", mappedBy="flat")
+     * @ORM\OneToMany(targetEntity="App\Entity\Room", mappedBy="flat", cascade={"persist","remove"})
      */
     private $rooms;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Equipment", inversedBy="flats")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Equipment", inversedBy="flats", cascade={"persist","remove"})
      */
     private $equipment;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\FlatPreference", inversedBy="flats")
+     * @ORM\ManyToMany(targetEntity="App\Entity\FlatPreference", inversedBy="flats", cascade={"persist","remove"})
      */
     private $preferences;
 
@@ -648,5 +650,21 @@ class Flat
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if(
+            $this->getCity() &&
+            Helpers::geoDistance($this->getCity()->getLat(), $this->getCity()->getLon(), $this->getLatitude(), $this->getLongitude()) > 20
+        )
+        {
+            $context->buildViolation('Zaznaczony punkt jest za bardzo oddalony od miasta "'.$this->getCity()->getName().'"')
+                ->atPath('latitude')
+                ->addViolation();
+        }
     }
 }
