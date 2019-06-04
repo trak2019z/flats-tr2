@@ -143,6 +143,10 @@ class FlatType extends AbstractType
                 'required' => true
             ])
             ->add('address')
+            ->add('photos', CollectionType::class,[
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
         ;
     }
 

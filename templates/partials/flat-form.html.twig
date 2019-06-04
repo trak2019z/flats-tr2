@@ -113,6 +113,23 @@
     </div>
 
     <div class="card mb-3">
+        <div class="card-header">
+            <button type="button" class="btn btn-sm btn-success float-right flat-add-photos" data-target="#photos"><i class="fa fa-plus"></i> Dodaj nowe</button>
+            Zdjęcia</div>
+        <div class="card-body">
+            <div class="row" id="photos">
+                {% for photo in form.photos %}
+                    <div class="col-sm-3 photo">
+                        <img src="{{ constant('App\\Entity\\Flat::PHOTO_WEB_PATH')~photo.vars.value }}" class="img-fluid">
+                        <i class="fa fa-trash"></i>
+                        <input type="hidden" name="flat[photos][]" value="{{ photo.vars.value }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
         <div class="card-header">Informacje końcowe</div>
         <div class="card-body">
             <div class="row">
@@ -133,5 +150,6 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Zapisz</button>
-    {{ form_end(form) }}
+    {{ form_row(form._token) }}
+    {{ form_end(form,{'render_rest':false}) }}
 </div>

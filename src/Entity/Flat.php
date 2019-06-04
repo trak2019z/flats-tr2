@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Helpers\Helpers;
 use App\Helpers\Slugs;
+use App\Validator\FlatPhoto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class Flat
 {
+    const PHOTO_WEB_PATH = '/uploads/photos/';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -152,6 +155,7 @@ class Flat
 
     /**
      * @ORM\Column(type="array")
+     * @FlatPhoto()
      */
     private $photos = [];
 

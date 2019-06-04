@@ -26,4 +26,14 @@ class Helpers
             }
         }
     }
+
+    public static function randomString($length = 16, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
+        $charactersLength = strlen($characters)-1;
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength)];
+        }
+        return $randomString;
+    }
 }
