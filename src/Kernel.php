@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -23,6 +24,8 @@ class Kernel extends BaseKernel
                 yield new $class();
             }
         }
+
+        Carbon::setLocale('pl');
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void

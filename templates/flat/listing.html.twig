@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Dostępne ogłoszenia
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>Lista ogłoszeń</h2>
+                {% for flat in flats %}
+                    <div class="row">
+                        <div class="col-3">
+                            <img src="{{ flat.firstPhotoPath }}" class="img-fluid" alt="{{ flat.title }}">
+                        </div>
+                        <div class="col-9">
+                            <span class="float-right text-right">
+                                <i class="far fa-clock"></i> {{ flat.createdAtDiff }}<br>
+                                <i class="fas fa-map-marker"></i> {{ flat.city.name }}, {{ flat.city.district.name }}, {{ flat.city.region.name }}
+                            </span>
+                            <h4><a href="{{ path('flat_show', {'flat': flat.id, 'slug': flat.slug}) }}">{{ flat.title }}</a></h4>
+                            <p class="text-muted">
+                                {{ flat.description|nl2br }}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                {{ knp_pagination_render(flats) }}
+            </div>
+            <div class="col-md-3">
+                <h2>Filtry:</h2>
+                {% for r in regions %}
+                    <div>
+                        <a href="{{ path('flats_listing_region', {'regionSlug': r.slug}) }}">{{ r.name }}</a>
+                        {% if r == region %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

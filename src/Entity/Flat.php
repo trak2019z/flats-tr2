@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Helpers\Helpers;
 use App\Helpers\Slugs;
 use App\Validator\FlatPhoto;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -670,5 +671,25 @@ class Flat
                 ->atPath('latitude')
                 ->addViolation();
         }
+    }
+
+    public function getFirstPhotoPath()
+    {
+        $photos = $this->getPhotos();
+
+        if(isset($photos[0]))
+            return '/uploads/photos/'.$photos[0];
+
+        return '/assets/img/nophoto.png';
+    }
+
+    public function getSlug()
+    {
+        return Slugs::create($this->getTitle());
+    }
+
+    public function getCreatedAtDiff()
+    {
+        return Carbon::instance($this->createdAt)->diffForHumans();
     }
 }

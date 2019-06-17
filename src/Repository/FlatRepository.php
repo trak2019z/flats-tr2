@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Flat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +18,33 @@ class FlatRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Flat::class);
+    }
+
+    /**
+     * @param array $criteria
+     * @return \Doctrine\ORM\Query
+     */
+    public function search($criteria=[])
+    {
+        $qb = $this->createQueryBuilder('flat')
+            ->select('flat, city')
+            ->innerJoin('flat.city','city');
+
+
+        if(isset($criteria['city']) && $criteria['city'])
+        {
+            $qb->andWhere('flat.city = :city')
+                ->setParameter('city', $criteria['city']);
+        }
+        elseif(isset($criteria['region']) && $criteria['region'])
+        {
+            $qb->andWhere('city.region = :region')
+                ->setParameter('region', $criteria['region']);
+        }
+
+        $qb->orderBy('flat.createdAt','DESC');
+
+        return $qb->getQuery();
     }
 
     // /**

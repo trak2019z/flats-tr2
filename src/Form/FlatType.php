@@ -37,9 +37,6 @@ class FlatType extends AbstractType
             ->add('description', TextareaType::class,[
                 'label' => 'Opis dodatkowy'
             ])
-            // TODO
-            //->add('latitude', HiddenType::class)
-            //->add('longitude', HiddenType::class)
             ->add('latitude')
             ->add('longitude')
             ->add('area', NumberType::class, [
