@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ flat.title }} #{{ flat.id }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ flat.title }}</h4>
+                        <img src="{{ flat.firstPhotoPath }}" class="img-fluid">
+                        <h5>Opis mieszkania:</h5>
+                        {{ flat.description|nl2br }}
+                        <h5>Informacje dodatkowe:</h5>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                Typ ogłoszenia: <strong>{{ flat.flatType.name }}</strong>
+                            </div>
+                            {% if flat.constructionYear %}
+                                <div class="col-sm-3">
+                                    Rok budowy budynku: <strong>{{ flat.constructionYear }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.area %}
+                                <div class="col-sm-3">
+                                    Metraż: <strong>{{ flat.area }}m3</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.floor %}
+                                <div class="col-sm-3">
+                                    Piętro: <strong>{{ flat.floor }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.floors %}
+                                <div class="col-sm-3">
+                                    Ilość pięter w budynku: <strong>{{ flat.floors }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.buildingType %}
+                                <div class="col-sm-3">
+                                    Typ budynku: <strong>{{ flat.buildingType.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.furnishings %}
+                                <div class="col-sm-3">
+                                    Umeblowanie: <strong>{{ flat.furnishings.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.heatingType %}
+                                <div class="col-sm-3">
+                                    Ogrzewanie: <strong>{{ flat.heatingType.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.kitchenType %}
+                                <div class="col-sm-3">
+                                    Typ kuchni: <strong>{{ flat.kitchenType.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.bathroomType %}
+                                <div class="col-sm-3">
+                                    Typ łazienki: <strong>{{ flat.bathroomType.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.windowsType %}
+                                <div class="col-sm-3">
+                                    Typ okien: <strong>{{ flat.windowsType.name }}</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.internet %}
+                                <div class="col-sm-3">
+                                    Internet: <strong>tak</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.internetBandwidth %}
+                                <div class="col-sm-3">
+                                    Przepustowość internetu: <strong>{{ flat.internetBandwidth }} mbit/s</strong>
+                                </div>
+                            {% endif %}
+                            {% if flat.preferences.count > 0 %}
+                                <div class="col-sm-3">
+                                    Preferuję:
+                                    {% for preference in flat.preferences %}
+                                        <strong>{{ preference.name }}, </strong>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if flat.equipment.count > 0 %}
+                                <div class="col-sm-3">
+                                    Wyposażenie:
+                                    {% for e in flat.equipment %}
+                                        <strong>{{ e.name }}, </strong>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if flat.rooms.count > 0 %}
+                            <h5>Pokoje:</h5>
+                            {% for room in flat.rooms %}
+                                <div>
+                                    #{{ loop.index }} - {{ room.name }}<br>
+                                    Ilość wolnych miejsc: {{ room.freePlaces }}<br>
+                                    Ilość miejsc: {{ room.places }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if flat.photos|length > 0 %}
+                            <h5>Zdjęcia:</h5>
+                            <div id="lightgallery">
+                            {% for photo in flat.photos %}
+                                <a href="/uploads/photos/{{ photo }}">
+                                    <img src="/uploads/photos/{{ photo }}" style="max-width: 200px"/>
+                                </a>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Informacje</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Szczegóły ogłszenia</h6>
+                        <p class="card-text">
+                            ID: {{ flat.id }}<br>
+                            dodano: {{ flat.createdAt|date('d.m.y H:i') }}
+                        </p>
+                        <h6 class="card-subtitle mb-2 text-muted">Dane kontaktowe</h6>
+                        <p class="card-text">
+                            {% if flat.firstName %}
+                                Osoba do kontaktu: <strong>{{ flat.firstName }}</strong><br>
+                            {% endif %}
+                            {% if flat.email %}
+                                Email: <a href="mailto:{{ flat.email }}">{{ flat.email }}</a><br>
+                            {% endif %}
+                            Telefon 1: <strong>{{ flat.phone1 }}</strong><br>
+                            {% if flat.phone2 %}
+                                Telefon 2: <strong>{{ flat.phone2 }}</strong><br>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Lokalizacja</h4>
+                        <h6 class="card-subtitle mb-2 text-muted"></h6>
+                        <p class="card-text">
+                            Miasto: <strong>{{ flat.city.name }}</strong><br>
+                            Powiat: <strong>{{ flat.city.district.name }}</strong><br>
+                            Województwo: <strong>{{ flat.city.region.name }}</strong><br>
+                            {% if flat.address %}
+                                {{ flat.address|nl2br }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <div class="embed-responsive-item" id="flat_map" data-lat="{{ flat.latitude }}" data-lon="{{ flat.longitude }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ dump() }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $('#lightgallery').lightGallery({
+        thumbnail:true
+    });
+</script>
+{% endblock %}

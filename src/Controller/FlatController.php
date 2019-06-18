@@ -64,7 +64,9 @@ class FlatController extends AbstractController
                 'id'=> $flat->getId()
             ]);
 
-        return $this->json([]);
+        return $this->render('flat/flat.html.twig',[
+            'flat' => $flat
+        ]);
     }
 
     /**
