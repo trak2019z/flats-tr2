@@ -42,6 +42,51 @@ class FlatRepository extends ServiceEntityRepository
                 ->setParameter('region', $criteria['region']);
         }
 
+        if(isset($criteria['priceFrom']))
+        {
+            $qb->andWhere('flat.price >= :priceFrom')
+                ->setParameter('priceFrom', $criteria['priceFrom']);
+        }
+
+        if(isset($criteria['priceTo']))
+        {
+            $qb->andWhere('flat.price <= :priceTo')
+                ->setParameter('priceTo', $criteria['priceTo']);
+        }
+
+        if(isset($criteria['flatType']))
+        {
+            $qb->andWhere('flat.flatType IN (:flatType)')
+                ->setParameter('flatType', $criteria['flatType']);
+        }
+
+        if(isset($criteria['buildingType']))
+        {
+            $qb->andWhere('flat.buildingType IN (:buildingType)')
+                ->setParameter('buildingType', $criteria['buildingType']);
+        }
+
+        if(isset($criteria['heatingType']))
+        {
+            $qb->andWhere('flat.heatingType IN (:heatingType)')
+                ->setParameter('heatingType', $criteria['heatingType']);
+        }
+
+        if(isset($criteria['kitchenType']))
+        {
+            $qb->andWhere('flat.kitchenType IN (:kitchenType)')
+                ->setParameter('kitchenType', $criteria['kitchenType']);
+        }
+
+        if(isset($criteria['windowsType']))
+        {
+            $qb->andWhere('flat.windowsType IN (:windowsType)')
+                ->setParameter('windowsType', $criteria['windowsType']);
+        }
+        
+        if(isset($criteria['dist']))
+            $qb->andWhere('ACOS(SIN(PI()*city.lat/180.0)*SIN(PI()*'.$criteria['lat'].'/180.0)+COS(PI()*city.lat/180.0)*COS(PI()*'.$criteria['lat'].'/180.0)*COS(PI()*'.$criteria['lon'].'/180.0-PI()*city.lon/180.0))*6371 < '.$criteria['dist']);
+
         $qb->orderBy('flat.createdAt','DESC');
 
         return $qb->getQuery();

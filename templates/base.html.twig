@@ -25,45 +25,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown07">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-md-0">
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-            </form>
+        <div>
+            {% if app.user %}
+                Witaj {{ app.user.username }},
+                <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+            {% else %}
+            <a href="{{ path('fos_user_security_login') }}">Logowanie</a>
+            <a href="{{ path('fos_user_registration_register') }}">Rejestracja</a>
+            {% endif %}
         </div>
+
     </div>
 </nav>
-
-<div class="homepage-banner">
-    <div class="banner">
-    </div>
-    <div class="content">
-        <h1>123123</h1>
-        <h1>123123</h1>
-        <h1>123123</h1>
-        <h1>123123</h1>
-    </div>
+<div class="my-5">
+    {% block body %}{% endblock %}
 </div>
-
-{% block body %}{% endblock %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>

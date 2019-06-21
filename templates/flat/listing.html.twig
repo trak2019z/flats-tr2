@@ -8,6 +8,28 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
+                <div id="filters" class="collapse">
+                    <h3>Filtry</h3>
+                    <div class="card">
+                        <div class="card-body">
+
+                            {{ form_start(filters) }}
+                            <div class="row">
+                                <div class="col-sm-4">{{ form_row(filters.flatType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.buildingType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.heatingType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.kitchenType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.bathroomType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.windowsType) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.priceFrom) }}</div>
+                                <div class="col-sm-4">{{ form_row(filters.priceTo) }}</div>
+                                <div class="col-sm-4 text-right"><button type="submit" class="btn btn-success"><i class="fas fa-search"></i> Szukaj</button></div>
+                            </div>
+                            {{ form_end(filters) }}
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="collapse" data-target="#filters"><i class="fas fa-filter"></i> Filtry</button>
                 <h2>Lista ogłoszeń</h2>
                 {% for flat in flats %}
                     <div class="row">
@@ -26,19 +48,96 @@
                         </div>
                     </div>
                     <hr>
+                {% else %}
+                    <div class="alert">Brak ogłoszeń</div>
                 {% endfor %}
                 {{ knp_pagination_render(flats) }}
             </div>
             <div class="col-md-3">
-                <h2>Filtry:</h2>
+                <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#mapModal">Szukaj ogłoszeń w promieniu</button>
+                <h2>Lokalizacja:</h2>
+                <div class="list-group">
+                    <a href="{{ path('flats_listing') }}" class="list-group-item list-group-item-action {{ region is null ? 'active' }} py-1">Cała Polska</a>
                 {% for r in regions %}
-                    <div>
-                        <a href="{{ path('flats_listing_region', {'regionSlug': r.slug}) }}">{{ r.name }}</a>
+                        <a href="{{ path('flats_listing_region', {'regionSlug': r.slug}) }}" class="list-group-item list-group-item-action {{ r == region ? 'active' }} py-1">{{ r.name }}</a>
                         {% if r == region %}
+                            <div class="list-group-item">
+                                {% for c in region.mainCities %}
+                                    <div>
+                                        <a href="{{ path('flats_listing_region_city', {'citySlug': c.slug, 'regionSlug': r.slug}) }}" class="{{ city == c ? 'font-weight-bold text-secondary' }}">{{ c.name }}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         {% endif %}
-                    </div>
                 {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="modal" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Szukaj ogłoszeń w promieniu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(distanceFilter) }}
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <div id="map" class="embed-responsive-item"></div>
+                    </div>
+                    {{ form_row(distanceFilter.dist) }}
+                    <button type="button" class="btn btn-danger" id="deleteMarker"><i class="fas fa-times"></i> Usuń znacznik</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-search"></i> Szukaj</button>
+                    {{ form_end(distanceFilter) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var marker = null;
+        map = L.map('map').setView([52.0691,19.48], 6);
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoidmljdXJlbCIsImEiOiJjams5c3Z6ZjUxenF4M3FxbG5reTVsOHF1In0.9YrR4IU3rxQSNuWGwQz_HQ'
+        }).addTo(map);
+
+        {% if region %}
+            {% set center = region.regionCenter %}
+            map.setView([{{ center[0] }},{{ center[1] }}], 8);
+        {% endif %}
+
+
+        {% if distanceFilter.vars.submitted and distanceFilter.vars.valid and distanceFilter.lat.vars.value %}
+            marker = L.marker([{{ distanceFilter.lat.vars.value }}, {{ distanceFilter.lon.vars.value }}]).addTo(map);
+        {% endif %}
+
+        map.on('click',function (e) {
+            if(marker)
+                map.removeLayer(marker);
+
+            marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+            $('#d_lat').val(e.latlng.lat);
+            $('#d_lon').val(e.latlng.lng);
+        });
+
+        $('#deleteMarker').click(function () {
+            if(marker)
+                map.removeLayer(marker);
+            $('#d_lat').val('');
+            $('#d_lon').val('');
+            $('#d_lat').closest('form').submit();
+        });
+
+        $('#mapModal').on('shown.bs.modal', function () {
+            map.invalidateSize();
+        });
+    </script>
 {% endblock %}

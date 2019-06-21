@@ -1,5 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'partials/flat-form.html.twig' with {'form': form}%}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-search"></i> Lista ogłoszeń</h5>
+                        <p class="card-text">
+                            Kliknij <a href="{{ path('flats_listing') }}" class="text-white">tutaj</a>, aby przeglądać ogłoszenia
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-plus"></i> Nowe ogłoszenie</h5>
+                        <p class="card-text">
+                            Kliknij <a href="{{ path('flat_create') }}" class="text-white">tutaj</a>, aby dodać nowe ogłoszenie
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Ostatnie ogłoszenia</h3>
+        <div class="row">
+            {% for flat in flats %}
+                <div class="col">
+                    <img src="{{ flat.firstPhotoPath }}" class="img-fluid" alt="{{ flat.title }}">
+                    <div class="text-center">
+                        <i class="fas fa-map-marker"></i> {{ flat.city.name }}, {{ flat.city.district.name }}, {{ flat.city.region.name }}
+                        <i class="far fa-clock"></i> {{ flat.createdAtDiff }}
+                    </div>
+                    <h4><a href="{{ path('flat_show', {'flat': flat.id, 'slug': flat.slug}) }}">{{ flat.title }}</a></h4>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
 {% endblock %}

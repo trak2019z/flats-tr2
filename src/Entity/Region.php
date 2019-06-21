@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,5 +97,35 @@ class Region
         }
 
         return $this;
+    }
+
+    public function getMainCities()
+    {
+        $criteria = new Criteria();
+        $criteria->andWhere(Criteria::expr()->eq('village', false));
+        $criteria->orderBy(['name'=>'asc']);
+
+        return $this->cities->matching($criteria);
+    }
+
+    public function getRegionCenter()
+    {
+        $criteria = new Criteria();
+        $criteria->orderBy(['lat'=>'asc']);
+        $criteria->setMaxResults(1);
+        $minLat = $this->cities->matching($criteria)->first()->getLat();
+        $criteria = new Criteria();
+        $criteria->orderBy(['lon'=>'asc']);
+        $criteria->setMaxResults(1);
+        $minLon = $this->cities->matching($criteria)->first()->getLon();
+        $criteria = new Criteria();
+        $criteria->orderBy(['lat'=>'desc']);
+        $criteria->setMaxResults(1);
+        $maxLat = $this->cities->matching($criteria)->first()->getLat();
+        $criteria->orderBy(['lon'=>'desc']);
+        $criteria->setMaxResults(1);
+        $maxLon = $this->cities->matching($criteria)->first()->getLon();
+
+        return [($maxLat+$minLat)/2,($maxLon+$minLon)/2];
     }
 }

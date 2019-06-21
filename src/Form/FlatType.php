@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -143,6 +144,11 @@ class FlatType extends AbstractType
             ->add('photos', CollectionType::class,[
                 'allow_add' => true,
                 'allow_delete' => true
+            ])
+            ->add('price', IntegerType::class,[
+                'required' => false,
+                'attr' => ['min'=>1,'max'=>1000000],
+                'label' => 'Cena (zł)'
             ])
         ;
     }

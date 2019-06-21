@@ -211,6 +211,13 @@ class Flat
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\GreaterThan(value=1)
+     * @Assert\LessThanOrEqual(value=1000000)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -691,5 +698,17 @@ class Flat
     public function getCreatedAtDiff()
     {
         return Carbon::instance($this->createdAt)->diffForHumans();
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): self
+    {
+        $this->price = $price;
+
+        return $this;
     }
 }
