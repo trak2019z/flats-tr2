@@ -60,6 +60,8 @@ class FlatController extends AbstractController
 
             $this->objectManager->persist($flat);
             $this->objectManager->flush();
+
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('flat/new.html.twig',[

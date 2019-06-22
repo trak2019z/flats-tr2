@@ -30,7 +30,7 @@
         <div class="row">
             {% for flat in flats %}
                 <div class="col">
-                    <img src="{{ flat.firstPhotoPath }}" class="img-fluid" alt="{{ flat.title }}">
+                    <img src="{{ flat.firstPhotoPath }}" class="img-fluid" alt="{{ flat.title }}" style="max-height: 100px">
                     <div class="text-center">
                         <i class="fas fa-map-marker"></i> {{ flat.city.name }}, {{ flat.city.district.name }}, {{ flat.city.region.name }}
                         <i class="far fa-clock"></i> {{ flat.createdAtDiff }}
