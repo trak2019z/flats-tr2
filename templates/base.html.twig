@@ -28,7 +28,7 @@
         <div>
             {% if app.user %}
                 Witaj {{ app.user.username }},
-                <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+                <a href="{{ path('logout_url') }}">Wyloguj</a>
             {% else %}
             <a href="{{ path('fos_user_security_login') }}">Logowanie</a>
             <a href="{{ path('fos_user_registration_register') }}">Rejestracja</a>
