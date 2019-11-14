@@ -1,0 +1,18 @@
+version: '3'
+services:
+  database:
+    image: mysql:5.6
+    ports:
+      - '3306:3306'
+  apache:
+    build: apache
+    ports:
+      - '80:80'
+    volumes:
+      - ../:/var/www/symfony
+    depends_on:
+      - php
+  php:
+    build: php
+    volumes:
+      - ../:/home/wwwroot
