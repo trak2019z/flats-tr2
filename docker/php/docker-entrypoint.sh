@@ -1,0 +1,1 @@
+#!/bin/shcomposer install
