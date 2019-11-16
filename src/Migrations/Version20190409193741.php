@@ -27,6 +27,14 @@ final class Version20190409193741 extends AbstractMigration
         $this->addSql('CREATE TABLE region (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(30) NOT NULL, slug VARCHAR(30) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE city ADD CONSTRAINT FK_2D5B023498260155 FOREIGN KEY (region_id) REFERENCES region (id)');
         $this->addSql('ALTER TABLE city ADD CONSTRAINT FK_2D5B0234B08FA272 FOREIGN KEY (district_id) REFERENCES district (id)');
+
+        $this->addSql("INSERT INTO region (`id`,`name`, `slug`) VALUES (1, 'podkarpackie', 'podkarpackie')");
+        $this->addSql("INSERT INTO district (`id`,`name`) VALUES (1, 'miasto Rzeszów')");
+        $this->addSql("INSERT INTO city (`id`,`region_id`,`district_id`,`name`,`slug`,`lat`,`lon`) VALUES (1, 1, 1, 'Rzeszów', 'rzeszow', 50.0409845, 21.9990331)");
+
+        $this->addSql("INSERT INTO flat_type (`id`,`name`) VALUES (1, 'mieszkanie')");
+        $this->addSql("INSERT INTO flat_type (`id`,`name`) VALUES (2, 'pokój')");
+        $this->addSql("INSERT INTO flat_type (`id`,`name`) VALUES (3, 'miejsce w pokoju')");
     }
 
     public function down(Schema $schema) : void

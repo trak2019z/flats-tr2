@@ -6,22 +6,26 @@ services:
       - '3306:3306'
     command: --default-authentication-plugin=mysql_native_password
     restart: always
+    volumes:
+      - mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: v53298nn85yv23
       MYSQL_USER: flats
       MYSQL_PASSWORD: flats
       MYSQL_DATABASE: flats
   php:
-    build: php
+    build: docker/php
     volumes:
-      - ../:/var/www/symfony:cached
+      - ./:/var/www/symfony:cached
     depends_on:
       - database
   apache:
-    build: apache
+    build: docker/apache
     ports:
       - '80:80'
     volumes:
-      - ../:/var/www/symfony
+      - ./:/var/www/symfony
     depends_on:
       - php
+volumes:
+  mysql-data:
