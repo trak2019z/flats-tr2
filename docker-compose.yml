@@ -14,13 +14,19 @@ services:
       MYSQL_PASSWORD: flats
       MYSQL_DATABASE: flats
   php:
-    build: docker/php
+    container_name: flats_php
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
     volumes:
       - ./:/var/www/symfony:cached
     depends_on:
       - database
   apache:
-    build: docker/apache
+    container_name: flats_apache
+    build:
+      context: .
+      dockerfile: docker/apache/Dockerfile
     ports:
       - '80:80'
     volumes:
